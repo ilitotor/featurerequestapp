@@ -1,0 +1,43 @@
+
+<html>
+   <body>
+	 <h1> Insert new features </h1>
+    <form method="POST" action="/">
+      <input type="text" name="title">
+	 	<input type="textarea" name="description"></textarea>
+  	 	<select name="client">
+				<option value="Client A">Client A</option>
+		 		<option value="Client B">Client B</option>
+				<option value="Client C">Client C</option>
+	 	</select> 
+	 	<input type="text" name="client_priority">
+	 	<input type="text" name="target_date" value="2019/04/12">
+   	<select name="product_area">
+				<option value="Policies">Policies</option>
+ 				<option value="Billing">Billing</option>
+				<option value="Claims">Claims</option>
+				<option value="Reports">Reports</option>
+		</select> 
+		<input type="submit" value="Add">
+   </form>
+
+	<h1> List of features </h1>
+	{% for feature in features %}
+		<form method="POST" action="./update">
+			<input type="hidden" value="{{feature.id_feature}}" name="id_feature">
+			<input type="text" value="{{feature.title}}" name="title">
+			<input type="textarea" value="{{feature.description}}" name="description">
+			<input type="text" value="{{feature.client}}"" name="client">
+			<input type="text" value="{{feature.client_priority}}"" name="client_priority">
+			<input type="text" value="{{feature.target_date}}" name="target_date">
+			<input type="text" value="{{feature.product_area}}" name="product_area">
+			<input type="submit" value="Update">
+			
+		</form>
+		<form method="POST" action="./delete">
+			<input type="hidden" value="{{feature.id_feature}}" name="id_feature">
+			<input type="submit" value="Delete">
+		</form>
+	{% endfor %}
+   </body>
+</html

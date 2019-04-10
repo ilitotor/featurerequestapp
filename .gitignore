@@ -1,0 +1,8 @@
+
+__pycoche__/
+*.py[cod]
+*$py.class
+.Python
+env/
+
+
