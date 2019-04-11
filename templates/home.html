@@ -1,43 +1,131 @@
-
-<html>
+<!doctype html>
+<html lang="en">
+   <head>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   </head>
    <body>
-	 <h1> Insert new features </h1>
-    <form method="POST" action="/">
-      <input type="text" name="title">
-	 	<input type="textarea" name="description"></textarea>
-  	 	<select name="client">
-				<option value="Client A">Client A</option>
-		 		<option value="Client B">Client B</option>
-				<option value="Client C">Client C</option>
-	 	</select> 
-	 	<input type="text" name="client_priority">
-	 	<input type="text" name="target_date" value="2019/04/12">
-   	<select name="product_area">
-				<option value="Policies">Policies</option>
- 				<option value="Billing">Billing</option>
-				<option value="Claims">Claims</option>
-				<option value="Reports">Reports</option>
-		</select> 
-		<input type="submit" value="Add">
-   </form>
+	<div class="container">
+  		<div class="row">
+	 		<h1> Insert new features </h1>
+		</div>
+			<form method="POST" action="/" class="needs-validation" novalidate>
+				<div class="form-group row">
+					<label for="FeatureTitle" class="col-sm-2 col-form-label">Feature Title</label>
+					<div class="col-sm-10">
+						<input type="text" name="title" class="form-control" placeholder="Title of the feature" required>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="FeatureDescription" class="col-sm-2 col-form-label">Description</label>
+					<div class="col-sm-10">
+						<textarea name="description"  class="form-control" placeholder="Description of the feature" row="3" required></textarea>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="FeatureClient" class="col-sm-2 col-form-label" >Client</label>
+					<div class="col-sm-10">
+						<select name="client" class="form-control" required>
+								<option value="Client A">Client A</option>
+								<option value="Client B">Client B</option>
+								<option value="Client C">Client C</option>
+						</select> 
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="FeatureClientPriority" class="col-sm-2 col-form-label">Client Priority</label>
+					<div class="col-sm-10">
+						<input type="number" min="0" step="1" name="client_priority" class="form-control" value="0" required>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="FeatureTargetDate" class="col-sm-2 col-form-label">Target Date</label>
+					<div class="col-sm-10" id="dateConfig">
+						<input type="text" name="target_date" id="txtDate" name="client_priority" class="form-control" placeholder="mm/dd/YYYY" required>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="FeatureProductArea" class="col-sm-2 col-form-label">Product Area</label>
+					<div class="col-sm-10">
+						<select name="product_area" class="form-control" required>
+								<option value="Policies">Policies</option>
+								<option value="Billing">Billing</option>
+								<option value="Claims">Claims</option>
+								<option value="Reports">Reports</option>
+						</select> 
+					</div>
+				</div>
+					<input type="submit" value="Add Feature" class="btn btn-primary">
+			</form>
+		
+	<p/>
+		<h1> List of features </h1>
+		<table class="table table-striped">
+		{% for feature in features %}
+			</tr>
+				<td> {{feature.title}} </td>
+				<td> {{feature.description}} </td>
+				<td> {{feature.client}} </td>
+				<td> {{feature.client_priority}} </td>
+				<td> {{ feature.target_date.strftime("%m/%d/%Y") }} </td>
+				<td> {{feature.product_area}} </td>
+				<td> <a href="./{{ feature.id_feature }}/"> Edit </a> </td>
+				<td> <a href="./{{ feature.id_feature }}/"> Delete </a> </td>
+			</tr>
 
-	<h1> List of features </h1>
-	{% for feature in features %}
-		<form method="POST" action="./update">
-			<input type="hidden" value="{{feature.id_feature}}" name="id_feature">
-			<input type="text" value="{{feature.title}}" name="title">
-			<input type="textarea" value="{{feature.description}}" name="description">
-			<input type="text" value="{{feature.client}}"" name="client">
-			<input type="text" value="{{feature.client_priority}}"" name="client_priority">
-			<input type="text" value="{{feature.target_date}}" name="target_date">
-			<input type="text" value="{{feature.product_area}}" name="product_area">
-			<input type="submit" value="Update">
+		<!--form method="POST" action="./update" class="needs-validation form-inline"" novalidate>
+			<input type="hidden" value="{{feature.id_feature}}" name="id_feature" class="form-control">
+			<input type="text" value="{{feature.title}}" name="title" class="form-control">
+			<input type="textarea" value="{{feature.description}}" name="description" class="form-control">
+			<input type="text" value="{{feature.client}}" name="client" class="form-control">
+			<input type="text" value="{{feature.client_priority}}" name="client_priority" class="form-control">
+			<input type="text" value="{{ feature.target_date.strftime("%m/%d/%Y") }}" name="target_date" class="form-control">
+			<input type="text" value="{{feature.product_area}}" name="product_area" class="form-control">
+			<input type="submit" value="Update" class="btn btn-primary">
 			
 		</form>
 		<form method="POST" action="./delete">
 			<input type="hidden" value="{{feature.id_feature}}" name="id_feature">
-			<input type="submit" value="Delete">
-		</form>
+			<input type="submit" value="Delete" class="btn btn-primary">
+		</form -->
 	{% endfor %}
+		</table>
+</div>
+
+<!--- JS Dependencies -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+
+<!--- end JS Dependencies -->
+<script>
+	$('#dateConfig input').datepicker({
+		format: "mm/dd/yyyy",
+		startDate: "today"
+	});
+</script>
+
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+</script>
+
    </body>
 </html

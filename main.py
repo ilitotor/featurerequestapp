@@ -4,15 +4,17 @@ from flask import Flask
 from flask import render_template
 from flask import request
 from flask import redirect
+from datetime import datetime
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy import Model
-from datetime import datetime
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "features.db"))
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = database_file
+app.config["SQLALCHEMY_TRACK_MODIFICATION"] = False
 
 db = SQLAlchemy(app)
 
@@ -40,17 +42,17 @@ def home():
             description=request.form.get("description"),
             client=request.form.get("client"),
             client_priority=request.form.get("client_priority"),
-            target_date=datetime.utcnow(),
+            target_date = datetime.strptime(request.form.get("target_date"), '%m/%d/%Y'),
             # target_date=request.form.get("target_date"),
             product_area=request.form.get("product_area"),
         )
         db.session.add(feature)
         db.session.commit()
-    features = Feature.query.all()
+    features = Feature.query.filter().order_by('client_priority')
     return render_template("home.html", features=features)
 
 
-@app.route("/update", methods=["POST"])
+@app.route("/update/", methods=["POST"])
 def update():
     update_feature = Feature(
         id_feature=request.form.get("id_feature"),
@@ -58,7 +60,7 @@ def update():
         description=request.form.get("description"),
         client=request.form.get("client"),
         client_priority=request.form.get("client_priority"),
-        target_date=datetime.utcnow(),
+        target_date = datetime.strptime(request.form.get("target_date"), '%m/%d/%Y'),
         # target_date=request.form.get("target_date"),
         product_area=request.form.get("product_area"),
     )
@@ -69,6 +71,7 @@ def update():
     feature.client_priority = update_feature.client_priority
     feature.target_date = update_feature.target_date
     feature.product_area = update_feature.product_area
+    #Feature.query.filter(client_priority>=feature.client_priority).values(feature.client_priority=feature.client_priority+1)
     # db.session.add(feature)
     db.session.commit()
     return redirect("/")
