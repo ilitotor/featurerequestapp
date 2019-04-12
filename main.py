@@ -8,6 +8,8 @@ from datetime import datetime
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy import Model
+from sqlalchemy import and_
+
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 database_file = "sqlite:///{}".format(os.path.join(project_dir, "features.db"))
@@ -36,6 +38,7 @@ class Feature(db.Model):
 
 @app.route("/", methods=["GET", "POST"])
 def home():
+    id_feature = request.form.get("id_feature")
     if request.form:
         feature = Feature(
             title=request.form.get("title"),
@@ -50,11 +53,12 @@ def home():
         db.session.commit()
     features = Feature.query.filter().order_by('client_priority')
     return render_template("home.html", features=features)
+   
 
 
-@app.route("/update/", methods=["POST"])
-def update():
-    update_feature = Feature(
+@app.route("/update/<int:id_feature>/")
+def update(id_feature):
+    '''update_feature = Feature(
         id_feature=request.form.get("id_feature"),
         title=request.form.get("title"),
         description=request.form.get("description"),
@@ -63,29 +67,29 @@ def update():
         target_date = datetime.strptime(request.form.get("target_date"), '%m/%d/%Y'),
         # target_date=request.form.get("target_date"),
         product_area=request.form.get("product_area"),
-    )
-    feature = Feature.query.filter_by(id_feature=update_feature.id_feature).first()
-    feature.title = update_feature.title
-    feature.description = update_feature.description
-    feature.client = update_feature.client
-    feature.client_priority = update_feature.client_priority
-    feature.target_date = update_feature.target_date
-    feature.product_area = update_feature.product_area
+    )'''
+    feature_update = Feature.query.filter_by(id_feature=id_feature).first()
     #Feature.query.filter(client_priority>=feature.client_priority).values(feature.client_priority=feature.client_priority+1)
     # db.session.add(feature)
-    db.session.commit()
-    return redirect("/")
+    #db.session.commit()
+    return render_template("/edit.html", feature=feature_update)
 
-@app.route("/delete", methods=["POST"])
-def delete():
-    delete_feature = Feature(
-        id_feature=request.form.get("id_feature"),
-    )
-    feature_delete = Feature.query.filter_by(id_feature=delete_feature.id_feature).first()
-    # db.session.add(feature)
-    db.session.delete(feature_delete)
-    db.session.commit()
-    return redirect("/")
+
+@app.route("/delete/<int:id_feature>/")
+def delete(id_feature):
+    feature_delete = Feature.query.filter_by(id_feature=id_feature).first()
+    if feature_delete:
+        # db.session.add(feature)
+        db.session.delete(feature_delete)
+        db.session.commit()
+    features = Feature.query.filter().order_by('client_priority')
+    return render_template("home.html", features=features, message=id_feature)
+    
+
+@app.errorhandler(404)
+def page_not_found(error):
+    features = Feature.query.filter().order_by('client_priority')
+    return render_template('home.html', features=features,),404
 
 if __name__ == "__main__":
     app.run(debug=True)

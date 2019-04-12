@@ -8,91 +8,57 @@
    <body>
 	<div class="container">
   		<div class="row">
-	 		<h1> Insert new features </h1>
+	 		<h1> Edit features </h1>
 		</div>
 			<form method="POST" action="/" class="needs-validation" novalidate>
 				<div class="form-group row">
 					<label for="FeatureTitle" class="col-sm-2 col-form-label">Feature Title</label>
 					<div class="col-sm-10">
-						<input type="text" name="title" class="form-control" placeholder="Title of the feature" required>
+						<input type="text" name="title" class="form-control" placeholder="Title of the feature" value="{{ feature.title }}" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="FeatureDescription" class="col-sm-2 col-form-label">Description</label>
 					<div class="col-sm-10">
-						<textarea name="description"  class="form-control" placeholder="Description of the feature" row="3" required></textarea>
+						<textarea name="description"  class="form-control" placeholder="Description of the feature" row="3"  required>{{ feature.description }}</textarea>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="FeatureClient" class="col-sm-2 col-form-label" >Client</label>
 					<div class="col-sm-10">
 						<select name="client" class="form-control" required>
-								<option value="Client A">Client A</option>
-								<option value="Client B">Client B</option>
-								<option value="Client C">Client C</option>
+								<option value="Client A" {% if feature.client == "Client A" %} selected {% endif %}>Client A</option>
+								<option value="Client B" {% if feature.client == "Client B" %} selected {% endif %}>Client B</option>
+								<option value="Client C" {% if feature.client == "Client C" %} selected {% endif %}>Client C</option>
 						</select> 
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="FeatureClientPriority" class="col-sm-2 col-form-label">Client Priority</label>
 					<div class="col-sm-10">
-						<input type="number" min="0" step="1" name="client_priority" class="form-control" value="0" required>
+						<input type="number" min="0" step="1" name="client_priority" class="form-control" value="{{ feature.client_priority }}" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="FeatureTargetDate" class="col-sm-2 col-form-label">Target Date</label>
 					<div class="col-sm-10" id="dateConfig">
-						<input type="text" name="target_date" id="txtDate" name="client_priority" class="form-control" placeholder="mm/dd/YYYY" required>
+						<input type="text" name="target_date" id="txtDate" name="client_priority" class="form-control" placeholder="mm/dd/YYYY" value="{{ feature.target_date.strftime("%m/%d/%Y") }}" required>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="FeatureProductArea" class="col-sm-2 col-form-label">Product Area</label>
 					<div class="col-sm-10">
 						<select name="product_area" class="form-control" required>
-								<option value="Policies">Policies</option>
-								<option value="Billing">Billing</option>
-								<option value="Claims">Claims</option>
-								<option value="Reports">Reports</option>
+								<option value="Policies" {% if feature.product_area == "Policies" %} selected {% endif %}>Policies</option>
+								<option value="Billing" {% if feature.product_area == "Billing" %} selected {% endif %}>Billing</option>
+								<option value="Claims" {% if feature.product_area == "Claims" %} selected {% endif %}>Claims</option>
+								<option value="Reports" {% if feature.product_area == "Reports" %} selected {% endif %}>Reports</option>
 						</select> 
 					</div>
 				</div>
-					<input type="submit" value="Add Feature" class="btn btn-primary">
+                    <input type="hidden" value={{ feature.id_feature }} name="id_feature">
+					<input type="submit" value="Edit Feature" class="btn btn-primary">
 			</form>
-		
-	<p/>
-		<h1> List of features </h1>
-		
-		{% if message %}
-		<div class="alert alert-success" role="alert">
-  			 ID {{ message }} was deleted 
-		</div>
-		{%  endif %}
-
-		<table class="table table-striped">
-			<thead>
-				<tr>
-				<th scope="col">Title</th>
-				<th scope="col">Description</th>
-				<th scope="col">Client</th>
-				<th scope="col">Priority</th>
-				<th scope="col">Date</th>
-				<th scope="col">Product Area</th>
-				<th scope="col" colspan="2"> Actions </th>
-				</tr>
-			</thead>
-		{% for feature in features %}
-			</tr>
-				<td> {{feature.title}} </td>
-				<td> {{feature.description}} </td>
-				<td> {{feature.client}} </td>
-				<td> {{feature.client_priority}} </td>
-				<td> {{ feature.target_date.strftime("%m/%d/%Y") }} </td>
-				<td> {{feature.product_area}} </td>
-				<td> <a href="/update/{{ feature.id_feature }}/"> Edit </a> </td>
-				<td> <a href="/delete/{{ feature.id_feature }}/"> Delete </a> </td>
-			</tr>
-	{% endfor %}
-		</table>
 </div>
 
 <!--- JS Dependencies -->
