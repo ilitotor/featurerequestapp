@@ -39,8 +39,9 @@ class Feature(db.Model):
 @app.route("/", methods=["GET", "POST"])
 def home():
     id_feature = request.form.get("id_feature")
-    if request.form:
-        feature = Feature(
+    if id_feature:
+        update_feature = Feature(
+            id_feature=request.form.get("id_feature"),
             title=request.form.get("title"),
             description=request.form.get("description"),
             client=request.form.get("client"),
@@ -49,8 +50,27 @@ def home():
             # target_date=request.form.get("target_date"),
             product_area=request.form.get("product_area"),
         )
-        db.session.add(feature)
-        db.session.commit()
+        feature_old = Feature.query.filter_by(id_feature=id_feature).first()
+        feature_old.title = update_feature.title
+        feature_old.description = update_feature.description
+        feature_old.client = update_feature.client
+        feature_old.client_priority = update_feature.client_priority
+        feature_old.target_date = update_feature.target_date
+        feature_old.product_area = update_feature.product_area
+        db.session.add(feature_old)
+    else:
+        if request.form:
+            feature = Feature(
+                title=request.form.get("title"),
+                description=request.form.get("description"),
+                client=request.form.get("client"),
+                client_priority=request.form.get("client_priority"),
+                target_date = datetime.strptime(request.form.get("target_date"), '%m/%d/%Y'),
+                # target_date=request.form.get("target_date"),
+                product_area=request.form.get("product_area"),
+            )
+            db.session.add(feature)
+    db.session.commit()
     features = Feature.query.filter().order_by('client_priority')
     return render_template("home.html", features=features)
    
@@ -69,7 +89,6 @@ def update(id_feature):
         product_area=request.form.get("product_area"),
     )'''
     feature_update = Feature.query.filter_by(id_feature=id_feature).first()
-    #Feature.query.filter(client_priority>=feature.client_priority).values(feature.client_priority=feature.client_priority+1)
     # db.session.add(feature)
     #db.session.commit()
     return render_template("/edit.html", feature=feature_update)
