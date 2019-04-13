@@ -29,7 +29,7 @@ All dependencies are listed in requirements.txt
 
 # Running local
 1) Create a virtualenv (https://virtualenv.pypa.io/en/latest/) 
-2) Clone this project on your local machine
+2) Clone this repository to your local machine ` git clone https://github.com/ilitotor/featurerequestapp.git `
 3) Enter in folder project called /featurerequesteapp 
 4) Execute ` pip install -r requirements.txt `
 5) Finally, execute:` python main.py `
