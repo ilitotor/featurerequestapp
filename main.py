@@ -64,8 +64,11 @@ def home():
         query = Feature.query.filter_by(client=feature_new.client).all()
         for priority in query:
             print(product_priority_to_compare, feature_new.client_priority)
-            if priority.id_feature != feature_new.id_feature and int(feature_new.client_priority) <= int(
-                priority.client_priority) and int(feature_new.client_priority) != int(product_priority_to_compare):
+            if (
+                priority.id_feature != feature_new.id_feature
+                and int(feature_new.client_priority) <= int(priority.client_priority)
+                and int(feature_new.client_priority) != int(product_priority_to_compare)
+            ):
                 priority.client_priority = int(priority.client_priority) + 1
                 db.session.add(priority)
 
@@ -87,8 +90,9 @@ def home():
             # increment +1 with priority added is equal other priority with the same Client
             query = Feature.query.filter_by(client=feature.client).all()
             for priority in query:
-                if priority.id_feature != feature.id_feature and int(feature.client_priority) <= int(
-                    priority.client_priority):
+                if priority.id_feature != feature.id_feature and int(
+                    feature.client_priority
+                ) <= int(priority.client_priority):
                     priority.client_priority = int(priority.client_priority) + 1
                     db.session.add(priority)
 
