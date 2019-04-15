@@ -51,7 +51,7 @@ def home():
             product_area=request.form.get("product_area"),
         )
         feature_new = Feature.query.filter_by(id_feature=id_feature).first()
-        product_priority_to_compare = feature_new.client_priority
+        priority_to_compare = feature_new.client_priority
         feature_new.title = update_feature.title
         feature_new.description = update_feature.description
         feature_new.client = update_feature.client
@@ -61,18 +61,28 @@ def home():
         db.session.add(feature_new)
 
         # increment +1 with priority added is equal other priority with the same Client
-        query = Feature.query.filter_by(client=feature_new.client).all()
+        query = (
+            Feature.query.filter_by(client=feature_new.client)
+            .order_by("client_priority")
+            .all()
+        )
         for priority in query:
-            print(product_priority_to_compare, feature_new.client_priority)
-            if (
-                priority.id_feature != feature_new.id_feature
-                and int(feature_new.client_priority) <= int(priority.client_priority)
-                and int(feature_new.client_priority) != int(product_priority_to_compare)
+            print(
+                priority_to_compare,
+                priority.client_priority,
+                update_feature.client_priority,
+            )
+            if priority.id_feature != feature_new.id_feature and (
+                int(priority.client_priority) == int(priority_to_compare)
+                or int(update_feature.client_priority) == int(priority.client_priority)
             ):
-                priority.client_priority = int(priority.client_priority) + 1
+                priority_to_compare = priority.client_priority = (
+                    int(priority.client_priority) + 1
+                )
                 db.session.add(priority)
 
     else:
+        priority_to_compare = 0
         if request.form:
             feature = Feature(
                 title=request.form.get("title"),
@@ -88,12 +98,21 @@ def home():
             db.session.add(feature)
 
             # increment +1 with priority added is equal other priority with the same Client
-            query = Feature.query.filter_by(client=feature.client).all()
+            query = (
+                Feature.query.filter_by(client=feature.client)
+                .order_by("client_priority")
+                .all()
+            )
             for priority in query:
-                if priority.id_feature != feature.id_feature and int(
-                    feature.client_priority
-                ) <= int(priority.client_priority):
-                    priority.client_priority = int(priority.client_priority) + 1
+                print(priority_to_compare, priority.client_priority, feature.id_feature)
+
+                if priority.id_feature != feature.id_feature and (
+                    int(priority.client_priority) == int(feature.client_priority)
+                    or int(priority_to_compare) == int(priority.client_priority)
+                ):
+                    priority_to_compare = priority.client_priority = (
+                        int(priority.client_priority) + 1
+                    )
                     db.session.add(priority)
 
     db.session.commit()
