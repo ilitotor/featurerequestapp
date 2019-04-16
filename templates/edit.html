@@ -1,30 +1,29 @@
 <!doctype html>
 <html lang="en">
    <head>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	    <meta charset='utf-8'>
+			<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+			<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-datepicker.min.css') }}">
+			<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+			<title> 🗳 Feature Request Application </title>
    </head>
    <body>
 	<div class="container">
-  		<div class="row">
+  		<div class="row justify-content-md-center">
 	 		<h1> Edit features </h1>
 		</div>
 			<form method="POST" action="/" class="needs-validation" novalidate>
 				<div class="form-group row">
-					<label for="FeatureTitle" class="col-sm-2 col-form-label">Feature Title</label>
 					<div class="col-sm-10">
-						<input type="text" name="title" class="form-control" placeholder="Title of the feature" value="{{ feature.title }}" required>
+						<input type="text" name="title" class="form-control"  value="{{ feature.title }}" required>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="FeatureDescription" class="col-sm-2 col-form-label">Description</label>
 					<div class="col-sm-10">
-						<textarea name="description"  class="form-control" placeholder="Description of the feature" row="3"  required>{{ feature.description }}</textarea>
+						<textarea name="description"  class="form-control" row="3"  required>{{ feature.description }}</textarea>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="FeatureClient" class="col-sm-2 col-form-label" >Client</label>
 					<div class="col-sm-10">
 						<select name="client" class="form-control" required>
 								<option value="Client A" {% if feature.client == "Client A" %} selected {% endif %}>Client A</option>
@@ -34,19 +33,16 @@
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="FeatureClientPriority" class="col-sm-2 col-form-label">Client Priority</label>
 					<div class="col-sm-10">
 						<input type="number" min="0" step="1" name="client_priority" class="form-control" value="{{ feature.client_priority }}" required>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="FeatureTargetDate" class="col-sm-2 col-form-label">Target Date</label>
 					<div class="col-sm-10" id="dateConfig">
-						<input type="text" name="target_date" id="txtDate" name="client_priority" class="form-control" placeholder="mm/dd/YYYY" value="{{ feature.target_date.strftime("%m/%d/%Y") }}" required>
+						<input type="text" name="target_date" id="txtDate" name="client_priority" class="form-control" value="{{ feature.target_date.strftime("%m/%d/%Y") }}" required>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="FeatureProductArea" class="col-sm-2 col-form-label">Product Area</label>
 					<div class="col-sm-10">
 						<select name="product_area" class="form-control" required>
 								<option value="Policies" {% if feature.product_area == "Policies" %} selected {% endif %}>Policies</option>
@@ -56,18 +52,15 @@
 						</select> 
 					</div>
 				</div>
-                    <input type="hidden" value={{ feature.id_feature }} name="id_feature">
+          <input type="hidden" value={{ feature.id_feature }} name="id_feature">
 					<input type="submit" value="Edit Feature" class="btn btn-primary">
 			</form>
-</div>
+	</div>
 
 <!--- JS Dependencies -->
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
-
-<!--- end JS Dependencies -->
+<script src="{{ url_for('static', filename='js/jquery-3.2.1.slim.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/bootstrap-datepicker.min.js') }}"></script>
 <script>
 	$('#dateConfig input').datepicker({
 		format: "mm/dd/yyyy",
@@ -94,6 +87,9 @@
   }, false);
 })();
 </script>
+
+<!--- end JS Dependencies -->
+
 
    </body>
 </html
