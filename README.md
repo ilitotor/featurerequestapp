@@ -34,5 +34,8 @@ All dependencies are listed in requirements.txt
 4) Execute ` pip install -r requirements.txt `
 5) Finally, execute:` python main.py `
 
+# Testing
+1) Run `python setup.py test`
+
 # Deployment Version
 https://featuretorquato.herokuapp.com/
